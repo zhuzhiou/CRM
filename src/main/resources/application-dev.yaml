@@ -1,0 +1,29 @@
+spring:
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://192.168.200.229:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false
+        username: root
+        password: iaFaI8ZdB%#s
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+            dialect: org.hibernate.dialect.MySQL5Dialect
+server:
+    port: 8080
+    context-path: /
+crm:
+    groupSize: 7
+    rankStrategy:
+        1: 2,3,4,5,6,7
+        2: 4,5,3,6,7
+        3: 6,7,4,5
+        4: 3,5,6,7
+        5: 3,6,7
+    deMergeGroup:
+        - 1: 2
+          2: 4
+          3: 5,4,5
+        - 1: 3
+          2: 6
+          3: 7
