@@ -24,4 +24,18 @@ public class CommonConfig {
     private List<Map<Integer,Integer>> deMergeGroup;
 
     private Integer groupSize;
+
+    /**
+     * 初始积分
+     */
+    private Long initPoint;
+
+    /**
+     * 出局人奖励
+     */
+    private Long rewardMember;
+    /**
+     * 出局人推荐人奖励
+     */
+    private Long rewardParent;
 }

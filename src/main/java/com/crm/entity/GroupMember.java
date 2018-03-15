@@ -3,6 +3,7 @@ package com.crm.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * Created by wlrllr on 2018/3/14.
@@ -10,7 +11,7 @@ import javax.persistence.Table;
 @Table(name = "CRM_GROUP_MEMBER")
 @Entity
 @lombok.Data
-public class GroupMember {
+public class GroupMember  implements Serializable {
 
     @Column(name="MEMBER_ID")
     private Long memberId;

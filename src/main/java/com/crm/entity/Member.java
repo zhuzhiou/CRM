@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,15 +14,15 @@ import java.util.Date;
 @Table(name = "CRM_MEMBER")
 @Entity
 @lombok.Data
-public class Member {
+public class Member  implements Serializable {
     @Id
-    @Column(name="ID")
-    private Long id;
+    @Column(name="MEMBER_ID")
+    private Long memberId;
     /**
      * 邀请人
      */
-    @Column(name="INVITER")
-    private Long inviter;
+    @Column(name="PARENT_ID")
+    private Long parentId;
     /**
      * 昵称
      */
