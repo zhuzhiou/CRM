@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
  * web入口，包含：1，系统顶级会员初始化初始化
  * 2，推荐用户
  */
-@RequestMapping("/common")
+@RequestMapping("/")
 @Controller
 public class CommonController {
 
@@ -29,12 +30,17 @@ public class CommonController {
     private GroupService groupService;
 
 
-    @GetMapping("/init")
-    public String init() {
-       return "";
+    @GetMapping("index")
+    public String index() {
+       return "index";
     }
 
-    @PostMapping("/doInit")
+    @GetMapping("init")
+    public String init() {
+        return "init";
+    }
+
+    @PostMapping("doInit")
     public JSONObject doInit(@RequestBody List<MemberVo> vo){
         JSONObject result = new JSONObject();
         if(vo != null && vo.size()>0){
@@ -43,7 +49,7 @@ public class CommonController {
         return result;
     }
 
-    @RequestMapping("/invite")
+    @RequestMapping("invite")
     public JSONObject invite(MemberVo vo) {
         JSONObject result = new JSONObject();
         if(groupService.qualifying(vo.getMember())){

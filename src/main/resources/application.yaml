@@ -10,11 +10,11 @@ spring:
             ddl-auto: update
             dialect: org.hibernate.dialect.MySQL5Dialect
     mvc:
-      view:
-        prefix: /view/
-        suffix: .jsp
+        view:
+            prefix: /WEB-INF/view/
+            suffix: .jsp
 server:
-    port: 8080
+    port: 80
     context-path: /
 crm:
     groupSize: 7
