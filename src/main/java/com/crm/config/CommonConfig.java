@@ -15,14 +15,13 @@ import java.util.Map;
 @Data
 public class CommonConfig {
 
-    private Map<Integer,String[]> rankStrategy;
+    private Map<String,Integer[]> rankStrategy;
     /**
      * 分组策略
      * 分成2组，第一组位置1对应2，位置2对应4，位置3对应5
      *         第二组位置1对应3，位置2对应6，位置3对应7
      */
-    private List<Map<Integer,Integer>> deMergeGroup;
-
+    // private List<Map<Integer, Integer>> deMergeGroup;
     private Integer groupSize;
 
     /**

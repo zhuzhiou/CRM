@@ -184,7 +184,7 @@ public class GroupServiceImpl implements GroupService {
      */
     private void deMergeGroup(Long groupId) {
         List<GroupMember> list = groupMemberRepository.findByGroupId(groupId);
-        List<Map<Integer, Integer>> mergeGroupStrategys = commonConfig.getDeMergeGroup();
+        List<Map<Integer, Integer>> mergeGroupStrategys = CommonConstant.deMergeGroup;
 
         List<GroupMember> groupMembers = new ArrayList<>();
         List<Group> groups = new ArrayList<>();
@@ -224,13 +224,13 @@ public class GroupServiceImpl implements GroupService {
     private boolean qualifying7(Long memberId, Group group) {
         //获取邀请人的当前位置
         Integer position = group.getPosition();
-        //获取未占的位置点
-        List<String> unUserPosition = new ArrayList<>();
+        //FIXME 获取未占的位置点
+        List<Integer> unUserPosition = new ArrayList<>();
         //通过策略去查找最优情况
-        Map<Integer, String[]> rankStrategy = commonConfig.getRankStrategy();
-        String[] strategy = rankStrategy.get(position);
+        Map<String, Integer[]> rankStrategy = commonConfig.getRankStrategy();
+        Integer[] strategy = rankStrategy.get(String.valueOf(position));
         int newPosition = 0;
-        for (String s : strategy) {
+        for (Integer s : strategy) {
             if (unUserPosition.contains(s)) {
                 newPosition = Integer.valueOf(s);
             }

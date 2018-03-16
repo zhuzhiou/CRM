@@ -1,8 +1,6 @@
 package com.crm.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -11,10 +9,13 @@ import java.io.Serializable;
 @Table(name = "CRM_GROUP_MEMBER")
 @Entity
 @lombok.Data
+@IdClass(GroupMemberMultiKeys.class)
 public class GroupMember  implements Serializable {
 
+    @Id
     @Column(name="MEMBER_ID")
     private Long memberId;
+    @Id
     @Column(name="GROUP_ID")
     private Long groupId;
     @Column(name="POSITION")
