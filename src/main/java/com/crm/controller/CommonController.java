@@ -7,10 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -32,12 +29,17 @@ public class CommonController {
 
     @GetMapping("index")
     public String index() {
-       return "index";
+       return "crm/index";
     }
 
-    @GetMapping("init")
-    public String init() {
-        return "init";
+    /**
+     * 测试页面用
+     * @param pageName
+     * @return
+     */
+    @GetMapping("page/{pageName}")
+    public String init(@PathVariable String pageName) {
+        return "crm/"+pageName;
     }
 
     @PostMapping("doInit")

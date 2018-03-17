@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="cn"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>menu</title>
+</head>
+<body>
+<!--这是菜单 后面做成页面引入 start -->
+<aside class="Hui-aside" th:fragment="menu">
+    <div class="menu_dropdown bk_2">
+        <dl id="menu-article">
+            <dt><i class="Hui-iconfont">&#xe616;</i> 会员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a th:href="@{member/list}" data-title="会员管理" href="javascript:void(0)">会员管理</a></li>
+                    <li><a data-href="member/list" data-title="分组管理" href="javascript:void(0)">分组管理</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl id="menu-admin">
+            <dt><i class="Hui-iconfont">&#xe62d;</i> 管理员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a data-href="admin-role.html" data-title="角色管理" href="javascript:void(0)">角色管理</a></li>
+                    <li><a data-href="admin-permission.html" data-title="权限管理" href="javascript:void(0)">权限管理</a></li>
+                    <li><a data-href="admin-list.html" data-title="管理员列表" href="javascript:void(0)">管理员列表</a></li>
+                </ul>
+            </dd>
+        </dl>
+    </div>
+</aside>
+</body>
+</html>
