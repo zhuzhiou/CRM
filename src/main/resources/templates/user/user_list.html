@@ -15,32 +15,22 @@
     </div>
 </nav>
 <div class="container">
-    <div class="row" th:object="${user}">
-        <form method="post" th:action="@{*{id} == null ? '/user/create' : '/user/update'}">
-            <div class="form-group">
-                <label>账号</label>
-                <input type="text" name="userName" class="form-control" placeholder="请输入手机号" th:value="*{userName}" />
-            </div>
-            <div class="form-group">
-                <label>性别</label>
-                <div class="radio">
-                    <label class="radio-inline">
-                        <input type="radio" name="gender" value="male" th:checked="*{gender} == 'male'" /> 男
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="gender" value="female" th:checked="*{gender} == 'female'" /> 女
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>角色</label>
-                <select multiple="multiple" name="roles">
-                    <option th:each="role:${roles}" th:text="${role.description}" th:value="${role.roleName}" th:selected="${#user.roles.contain()}">角色名称</option>
-                </select>
-            </div>
-            <input type="hidden" name="id" th:value="*{id}" />
-            <button type="submit" class="btn btn-primary">提交</button>
-        </form>
+    <div class="row">
+        <table class="table table-bordered">
+            <tr>
+                <th>账号</th>
+                <th>是否有效</th>
+                <th>操作</th>
+            </tr>
+            <tr th:each="sysUser:${sysUsers}">
+                <td th:text="${sysUser.username}">用户名</td>
+                <td th:text="${sysUser.enabled}">是否有效</td>
+                <td>
+                    <a href="/admin/user/form?userId=xxx" th:href="@{/admin/user/form(userid=${sysUser.id})}" role="button" class="btn btn-xs btn-danger">编辑</a>
+                    <a href="/admin/user/delete?userId=xxx" th:href="@{/user/disable(userid=${sysUser.id})}" role="button" class="btn btn-xs btn-danger">删除</a>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 </body>

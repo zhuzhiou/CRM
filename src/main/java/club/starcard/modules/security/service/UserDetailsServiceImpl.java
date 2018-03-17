@@ -18,7 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Assert.notNull(username, "用户名不能为空");
-        SysUser sysUser = sysUserService.getUserInfo(username);
+        SysUser sysUser = sysUserService.getSysUserByUsername(username);
         if (sysUser == null) {
             throw new UsernameNotFoundException("用户不存在");
         }
