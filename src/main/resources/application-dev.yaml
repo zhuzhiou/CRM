@@ -1,14 +1,17 @@
 spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://192.168.150.129:3306/crm?useUnicode=true&characterEncoding=utf-8&useSSL=false
+        url: jdbc:mysql://127.0.0.1:3306/crm?useUnicode=true&characterEncoding=utf-8&useSSL=false
         username: root
-        password: develop
+        password: root
     jpa:
         show-sql: true
         hibernate:
             ddl-auto: update
             dialect: org.hibernate.dialect.MySQL5Dialect
+    thymeleaf:
+        mode: HTML5
+        cache: false
 server:
     port: 8080
     context-path: /
@@ -26,3 +29,9 @@ crm:
     initPoint: 0
     rewardMember: 2000
     rewardParent: 6000
+security:
+  headers:
+    frame: true
+  basic:
+    enabled: false
+
