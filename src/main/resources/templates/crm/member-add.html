@@ -1,22 +1,39 @@
 <!DOCTYPE HTML>
-<html lang="cn" xmlns:th="http://www.thymeleaf.org">
+<html lang="cn" xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.w3.org/1999/XSL/Transform">
 <head>
     <title>邀请会员</title>
-    <p th:replace="crm/comm/_meta :: _meta"/>
+    <p th:replace="crm/comm/_meta :: meta"/>
+    <style>
+        hide{
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <article class="page-container">
     <form action="" method="post" class="form form-horizontal" id="form-member-add">
+        <div th:class="${open}? 'hide' : 'row cl'">
+            <label class="form-label col-xs-4 col-sm-3">邀请人：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="邀请人ID" name="parentId"/>
+            </div>
+        </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>用户名：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="会员的登陆账号" id="nickName" name="nickName"/>
+                <input type="text" class="input-text" value="" placeholder="会员的登陆账号" name="nickName"/>
             </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>姓名：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="会员姓名" id="username" name="username"/>
+                <input type="text" class="input-text" value="" placeholder="会员姓名" name="name"/>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">身份証：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="身份証" name="idCard"/>
             </div>
         </div>
         <div class="row cl">
@@ -39,7 +56,7 @@
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="" id="mobile" name="mobile"/>
+                <input type="text" class="input-text" value="" placeholder="" id="phone" name="phone"/>
             </div>
         </div>
         <div class="row cl">
@@ -63,7 +80,7 @@
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3">备注：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <textarea name="beizhu" cols="" rows="" class="textarea" placeholder="说点什么...最少输入10个字符"
+                <textarea name="remark" cols="" rows="" class="textarea" placeholder="说点什么...最少输入10个字符"
                           onKeyUp="$.Huitextarealength(this,100)"></textarea>
                 <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
             </div>
@@ -73,16 +90,17 @@
                 <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;"/>
             </div>
         </div>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     </form>
 </article>
 
 <footer th:replace="crm/comm/_footer :: footer"/>
 
 <!--请在下方写此页面业务相关的脚本-->
-<script type="text/javascript" th:src="@{lib/My97DatePicker/4.8/WdatePicker.js}"></script>
-<script type="text/javascript" th:src="@{lib/jquery.validation/1.14.0/jquery.validate.js}"></script>
-<script type="text/javascript" th:src="@{lib/jquery.validation/1.14.0/validate-methods.js}"></script>
-<script type="text/javascript" th:src="@{lib/jquery.validation/1.14.0/messages_zh.js}"></script>
+<script type="text/javascript" src="/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="/lib/jquery.validation/1.14.0/messages_zh.js"></script>
 <script type="text/javascript">
     $(function () {
         $('.skin-minimal input').iCheck({
@@ -93,7 +111,7 @@
 
         $("#form-member-add").validate({
             rules: {
-                username: {
+                name: {
                     required: true,
                     minlength: 2,
                     maxlength: 16
@@ -101,7 +119,7 @@
                 sex: {
                     required: true,
                 },
-                mobile: {
+                phone: {
                     required: true,
                     isMobile: true,
                 },
@@ -115,10 +133,18 @@
             focusCleanup: true,
             success: "valid",
             submitHandler: function (form) {
-                //$(form).ajaxSubmit();
-                var index = parent.layer.getFrameIndex(window.name);
-                //parent.$('.btn-refresh').click();
-                parent.layer.close(index);
+                $(form).ajaxSubmit({
+                    url:'/member/add',
+                    type:'post',
+                    success:function(data){
+                        if(data.code == 0){
+                            alert('新增成功！');
+                            layer_close();
+                        }else{
+                            alert('新增失敗!');
+                        }
+                    }
+                });
             }
         });
     });

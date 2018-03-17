@@ -26,8 +26,15 @@ public class Member  implements Serializable {
     /**
      * 昵称
      */
+    @Column(name="NICK_NAME")
+    private String nickName;
+
     @Column(name="NAME")
     private String name;
+    @Column(name="SEX")
+    private String sex;
+    @Column(name="CITY")
+    private String city;
 
     @Column(name="ID_CARD")
     private String idCard;
@@ -45,8 +52,11 @@ public class Member  implements Serializable {
     private Double money;
 
     /**
-     * 受邀时间
+     * 入會时间
      */
-    @Column(name="INVITED_TIME")
-    private Date invitedTime;
+    @Column(name="CREATE_TIME")
+    private Date createTime;
+
+    @Column(name="REMARK")
+    private String remark;
 }

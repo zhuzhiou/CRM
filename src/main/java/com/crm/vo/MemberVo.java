@@ -18,8 +18,10 @@ public class MemberVo {
     /**
      * 昵称
      */
+    private String nickName;
     private String name;
-
+    private String sex;
+    private String city;
     private String idCard;
 
     private String phone;
@@ -30,6 +32,8 @@ public class MemberVo {
      * 入伙金额
      */
     private Double money;
+
+    private String remark;
 
     /**
      * 受邀时间
@@ -43,6 +47,9 @@ public class MemberVo {
         member.setIdCard(this.idCard);
         member.setPhone(this.phone);
         member.setEmail(this.email);
+        member.setSex(this.sex);
+        member.setNickName(this.nickName);
+        member.setCity(this.city);
         return member;
     }
 }

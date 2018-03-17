@@ -1,29 +1,82 @@
 package com.crm.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.crm.constant.CommonConstant;
+import com.crm.entity.Member;
+import com.crm.service.InviteService;
+import com.crm.service.MemberService;
+import com.crm.vo.MemberVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/member/")
 @Controller
 public class MemberController {
 
+    @Autowired
+    private InviteService inviteService;
+    @Autowired
+    private MemberService memberService;
+
+    /**
+     * 新增会员界面
+     * @return
+     */
     @GetMapping("add")
     public String addView() {
         return "crm/member-add";
     }
 
+    /**
+     * 开盘新增顶级会员
+     * @param model
+     * @return
+     */
+    @GetMapping("open")
+    public String openView(Model model) {
+        model.addAttribute("open",true);
+        return "crm/member-add";
+    }
+
     @PostMapping("add")
-    public JSONObject add() {
+    @ResponseBody
+    public JSONObject add(@ModelAttribute MemberVo memberVo) {
+        //FIXME 校驗用戶是否已存在
         JSONObject result = new JSONObject();
-        result.put("code",0);
+        boolean flag = false;
+        if(memberVo.getParentId() != null){
+            //添加会员
+            flag = inviteService.qualifying(memberVo.getMember());
+        }else{
+            //开盘
+            flag = inviteService.crmOpen(memberVo);
+        }
+        if(flag){
+            result.put("code",0);
+        }
         return result;
     }
 
     @GetMapping("list")
     public String listView() {
         return "crm/member-list";
+    }
+
+    @PostMapping("list")
+    @ResponseBody
+    public Page<Member> list(@ModelAttribute  Member member,
+                                   Integer pageSize,Integer pageNum) {
+        //FIXME 如何用example支持like EXample.of()无法满足
+        /*search:
+        dateMin:
+        dateMax:*/
+        Page<Member> page = memberService.page(member,pageNum,pageSize);
+        return page;
     }
 }

@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Created by wlrllr on 2018/3/14.
  */
-@Table(name = "MMC_POINT")
+@Table(name = "CRM_POINT")
 @Entity
 @lombok.Data
 public class Point  implements Serializable {
@@ -18,6 +18,8 @@ public class Point  implements Serializable {
     private Long pointId;
     @Column(name="MEMBER_ID")
     private Long memberId;
-    @Column(name="POINT")
-    private Long point;
+    @Column(name="INIT_POINT")
+    private Long initPoint;
+    @Column(name="TOTAL_POINT")
+    private Long totalPoint;
 }
