@@ -16,7 +16,7 @@ import java.util.Date;
 @Table(name = "CRM_MEMBER")
 @Entity
 @lombok.Data
-public class Member extends BaseEntity implements Serializable {
+public class Member implements Serializable {
 
 
     @Id
