@@ -19,7 +19,7 @@ public class MemberVo {
     private String nickName;
     private String name;
     private String sex;
-    private String city;
+    private String address;
     private String idCard;
 
     private String phone;
@@ -47,7 +47,7 @@ public class MemberVo {
         member.setEmail(this.email);
         member.setSex(this.sex);
         member.setNickName(this.nickName);
-        member.setCity(this.city);
+        member.setAddress(this.address);
         return member;
     }
 }

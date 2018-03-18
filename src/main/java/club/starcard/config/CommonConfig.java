@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,4 +37,10 @@ public class CommonConfig {
      * 出局人推荐人奖励
      */
     private Long rewardParent;
+
+    private List<Map<String,String>> banks;
+    /**
+     * 组内位置详情
+     */
+    private List<Integer> groupPosition;
 }

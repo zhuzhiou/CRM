@@ -4,84 +4,96 @@
     <title>邀请会员</title>
     <p th:replace="crm/comm/_meta :: meta"/>
     <style>
-        hide{
+        hide {
             display: none;
         }
     </style>
 </head>
 <body>
 <article class="page-container">
-    <form action="" method="post" class="form form-horizontal" id="form-member-add">
+    <form th:action="@{*{memberId} == null ? '/member/add' : '/member/edit'}" th:object="${member}"  method="post" class="form form-horizontal" id="form-member-add">
         <div th:class="${open}? 'hide' : 'row cl'">
             <label class="form-label col-xs-4 col-sm-3">邀请人：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="邀请人ID" name="parentId"/>
+                <input type="text" class="input-text" th:value="*{parentId}" placeholder="邀请人ID" name="parentId"/>
+                <input type="hidden" th:value="*{memberId}" name="memberId"/>
             </div>
         </div>
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>用户名：</label>
+            <label class="form-label col-xs-4 col-sm-3">昵称：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="会员的登陆账号" name="nickName"/>
+                <input type="text" class="input-text" th:value="*{nickName}" placeholder="会员的昵称" name="nickName"/>
             </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>姓名：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="会员姓名" name="name"/>
+                <input type="text" class="input-text" th:value="*{name}" placeholder="会员姓名" name="name"/>
             </div>
         </div>
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3">身份証：</label>
+            <label class="form-label col-xs-4 col-sm-3">身份证：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="身份証" name="idCard"/>
+                <input type="text" class="input-text" th:value="*{idCard}" placeholder="身份证" name="idCard"/>
             </div>
         </div>
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>性别：</label>
+            <label class="form-label col-xs-4 col-sm-3">性别：</label>
             <div class="formControls col-xs-8 col-sm-9 skin-minimal">
                 <div class="radio-box">
-                    <input name="sex" type="radio" id="sex-1" checked="checked" />
-                    <label for="sex-1">男</label>
+                    <input name="sex" type="radio" th:value="B" th:checked="*{sex == 'B'?'checked':'false'}"/>
+                    <label>男</label>
                 </div>
                 <div class="radio-box">
-                    <input type="radio" id="sex-2" name="sex"/>
-                    <label for="sex-2">女</label>
+                    <input type="radio" value="G" name="sex" th:checked="*{sex == 'G'?'checked':'false'}"/>
+                    <label>女</label>
                 </div>
                 <div class="radio-box">
-                    <input type="radio" id="sex-3" name="sex"/>
-                    <label for="sex-3">保密</label>
+                    <input type="radio" value="N" name="sex" th:checked="*{sex == 'N'?'checked':'false'}"/>
+                    <label>保密</label>
                 </div>
             </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="" id="phone" name="phone"/>
+                <input type="text" class="input-text" th:value="*{phone}" placeholder="请务必填写自己的手机号" name="phone"/>
             </div>
         </div>
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>邮箱：</label>
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>开户行：</label>
+            <div class="formControls col-xs-8 col-sm-9" >
+                <span class="select-box">
+                <select class="select" size="1" name="bankName">
+                    <option th:each="bank:${banks}" th:value="${bank.code}" th:text="${bank.name}"
+                            th:selected="${bank.code == code?'selected':'false'}">
+                        </option>
+                </select>
+                </span>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>银行卡号：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" th:value="*{bankAccount}" placeholder="" name="bankAccount"/>
+            </div>
+        </div>
+        <!--<div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">邮箱：</label>
             <div class="formControls col-xs-8 col-sm-9">
                 <input type="text" class="input-text" placeholder="@" name="email" id="email"/>
             </div>
-        </div>
+        </div>-->
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3">所在城市：</label>
-            <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
-				<select class="select" size="1" name="city">
-					<option value="" selected="selected">请选择城市</option>
-					<option value="1">北京</option>
-					<option value="2">上海</option>
-					<option value="3">广州</option>
-					<option value="4">深圳</option>
-				</select>
-				</span></div>
+            <label class="form-label col-xs-4 col-sm-3">住址：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" th:value="*{address}" placeholder="" name="address"/>
+            </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3">备注：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <textarea name="remark" cols="" rows="" class="textarea" placeholder="说点什么...最少输入10个字符"
-                          onKeyUp="$.Huitextarealength(this,100)"></textarea>
+                <textarea name="remark" cols="" rows="" class="textarea" th:text="*{remark}" placeholder="说点什么..."></textarea>
                 <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
             </div>
         </div>
@@ -90,7 +102,7 @@
                 <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;"/>
             </div>
         </div>
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     </form>
 </article>
 
@@ -116,16 +128,12 @@
                     minlength: 2,
                     maxlength: 16
                 },
-                sex: {
-                    required: true,
-                },
                 phone: {
                     required: true,
                     isMobile: true,
                 },
-                email: {
+                bankAccount: {
                     required: true,
-                    email: true,
                 }
 
             },
@@ -134,14 +142,13 @@
             success: "valid",
             submitHandler: function (form) {
                 $(form).ajaxSubmit({
-                    url:'/member/add',
-                    type:'post',
-                    success:function(data){
-                        if(data.code == 0){
-                            alert('新增成功！');
+                    type: 'post',
+                    success: function (data) {
+                        if (data.code == 0) {
+                            alert('操作成功！');
                             layer_close();
-                        }else{
-                            alert('新增失敗!');
+                        } else {
+                            alert('操作失敗!');
                         }
                     }
                 });
@@ -149,6 +156,5 @@
         });
     });
 </script>
-<!--/请在上方写此页面业务相关的脚本-->
 </body>
 </html>

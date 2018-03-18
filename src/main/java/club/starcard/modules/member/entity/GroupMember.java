@@ -19,7 +19,7 @@ public class GroupMember  implements Serializable {
     @Column(name="GROUP_ID")
     private Long groupId;
     @Column(name="POSITION")
-    private int position;
+    private Integer position;
 
     public GroupMember() {
     }

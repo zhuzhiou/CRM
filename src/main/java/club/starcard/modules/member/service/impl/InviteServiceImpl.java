@@ -10,9 +10,11 @@ import club.starcard.modules.member.repository.GroupMemberRepository;
 import club.starcard.modules.member.repository.GroupRepository;
 import club.starcard.modules.member.repository.MemberRepository;
 import club.starcard.modules.member.repository.PointRepository;
+import club.starcard.modules.member.service.GroupService;
 import club.starcard.modules.member.service.InviteService;
 import club.starcard.util.SnowflakeGenerator;
 import club.starcard.modules.member.vo.MemberVo;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,42 +42,48 @@ public class InviteServiceImpl implements InviteService {
     private PointRepository pointRepository;
     @Autowired
     private CommonConfig commonConfig;
+    @Autowired
+    private GroupService groupService;
 
     private static final Logger logger = LoggerFactory.getLogger(InviteServiceImpl.class);
 
     /**
      * 邀请用户 1新增用户
-     *
      */
     @Override
     public boolean qualifying(Member member) {
-        addNewMember(member);
+        if (!addNewMember(member, true)) {
+            logger.error("邀请用户时，没有邀请人或者邀请人不存在!");
+            return false;
+        }
         //根据邀请人查找其分组
-        return qualifying(member.getMemberId(),member.getParentId());
+        return qualifying(member.getMemberId(), member.getParentId());
     }
 
     /**
      * 添加顶级会员
-     * @param vo
+     *
+     * @param member
      * @return
      */
     @Override
-    public boolean crmOpen(MemberVo vo) {
-        Member member = vo.getMember();
-        addNewMember(member);
-        addGroup(member.getMemberId());
-        return true;
+    public boolean crmOpen(Member member) {
+        if (addNewMember(member, false)) {
+            return addGroup(member.getMemberId());
+        }
+        return false;
     }
 
     /**
      * 邀请用户 2，通过会员，邀请人对会员进行分组排位
+     *
      * @param memberId
      * @param parentId
      * @return
      */
     private boolean qualifying(Long memberId, Long parentId) {
         //根据邀请人查找其分组
-        List<Group> list = groupRepository.findGroupByMemberId(parentId);
+        List<Group> list = groupService.findGroupByMemberId(parentId);
         if (list != null && list.size() > 0) {
             Group group = list.get(0);
             return qualifying(memberId, group);
@@ -85,10 +93,25 @@ public class InviteServiceImpl implements InviteService {
 
     /**
      * 新增会员信息
+     *
      * @param member
      */
-    private void addNewMember(Member member) {
+    private boolean addNewMember(Member member, Boolean hasParentId) {
         member.setMemberId(SnowflakeGenerator.generator());
+        if (hasParentId) {
+            Long parentId = member.getParentId();
+            if (parentId != null) {
+                Member parent = memberRepository.findOne(member.getParentId());
+                if (parent != null) {
+                    member.setParentName(parent.getName());
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        member.setCreateTime(new Date());
         memberRepository.save(member);
         //新增会员积分
         Point point = new Point();
@@ -96,13 +119,15 @@ public class InviteServiceImpl implements InviteService {
         point.setMemberId(member.getMemberId());
         point.setInitPoint(commonConfig.getInitPoint());
         pointRepository.save(point);
+        return true;
     }
 
     /**
      * 新增会员信息
+     *
      * @param memberId
      */
-    private void addGroup(Long memberId) {
+    private boolean addGroup(Long memberId) {
         Group group = new Group();
         group.setStatus(CommonConstant.GROUP_STATUS_Y);
         group.setCreateTime(new Date());
@@ -112,10 +137,12 @@ public class InviteServiceImpl implements InviteService {
         group.setName(group.getGroupId().toString());
         groupRepository.save(group);
         groupMemberRepository.save(new GroupMember(memberId, group.getGroupId(), 1));
+        return true;
     }
 
     /**
      * 邀请用户 3，将会员分配到该组，然后判断该组是否满员
+     *
      * @param memberId
      * @param group
      * @return
@@ -123,10 +150,7 @@ public class InviteServiceImpl implements InviteService {
     private boolean qualifying(Long memberId, Group group) {
         if (group != null) {
             //排位
-            if (qualifying7(memberId, group)) {
-                group.setCurrentSize(group.getCurrentSize() + 1);
-                groupRepository.updateCurrentSize(group.getCurrentSize(), group.getGroupId());
-            }
+            qualifying7(memberId, group);
             //判断该分组是否已满，如果满了进行分组
             if (group.getGroupSize().intValue() == group.getCurrentSize().intValue()) {
                 //进行组拆分，配送积分及money，并重新获取新的分组
@@ -138,6 +162,7 @@ public class InviteServiceImpl implements InviteService {
 
     /**
      * 邀请用户 4，该组已满员，对会员进行奖励，对出局人重新分组，拆分成2组
+     *
      * @param group
      */
     private void deMerge(Group group) {
@@ -151,7 +176,7 @@ public class InviteServiceImpl implements InviteService {
         } else {
             //这里处理顶级会员
             //查询最近可用的组，将顶级会员分配到该组
-            List<Group> groups = groupRepository.findLastGroup();
+            List<Group> groups = groupService.findLastGroup();
             if (groups != null && groups.size() > 0) {
                 qualifying(member.getMemberId(), groups.get(0));
             }
@@ -162,15 +187,16 @@ public class InviteServiceImpl implements InviteService {
 
     /**
      * 邀请用户 4-1，奖励出局人及其推荐者
+     *
      * @param member
      */
-    private void reward(Member member){
-       if(member != null){
-           pointRepository.addPoint(member.getMemberId(),commonConfig.getRewardMember());
-           if(member.getParentId() != null){
-               pointRepository.addPoint(member.getParentId(),commonConfig.getRewardParent());
-           }
-       }
+    private void reward(Member member) {
+        if (member != null) {
+            pointRepository.addPoint(member.getMemberId(), commonConfig.getRewardMember());
+            if (member.getParentId() != null) {
+                pointRepository.addPoint(member.getParentId(), commonConfig.getRewardParent());
+            }
+        }
     }
 
     /**
@@ -213,6 +239,7 @@ public class InviteServiceImpl implements InviteService {
     /**
      * 邀请用户 3-1，对会员进行排位
      * 按7人组策略排位
+     *
      * @param memberId
      * @param group
      * @return
@@ -220,8 +247,23 @@ public class InviteServiceImpl implements InviteService {
     private boolean qualifying7(Long memberId, Group group) {
         //获取邀请人的当前位置
         Integer position = group.getPosition();
-        //FIXME 获取未占的位置点
-        List<Integer> unUserPosition = new ArrayList<>();
+        List<Integer> unUserPosition = commonConfig.getGroupPosition();
+        //查询所有已占位置
+        if(group.getGroupId() != null){
+            List<GroupMember> list = groupMemberRepository.findByGroupId(group.getGroupId());
+            if(list != null && list.size()>0){
+               for(GroupMember gm : list){
+                   if(unUserPosition.contains(gm.getPosition())){
+                       unUserPosition.remove(gm.getPosition());
+                   }
+               }
+            }
+            logger.info("用户排位，组内空闲位置【{}】,组【{}】", JSONObject.toJSONString(unUserPosition),group.getGroupId());
+        }else{
+            logger.error("用户排位失败，组ID为空，邀请人【{}】，会员【{}】", group.getMemberId(), memberId);
+            return false;
+        }
+
         //通过策略去查找最优情况
         Map<String, Integer[]> rankStrategy = commonConfig.getRankStrategy();
         Integer[] strategy = rankStrategy.get(String.valueOf(position));
@@ -229,6 +271,7 @@ public class InviteServiceImpl implements InviteService {
         for (Integer s : strategy) {
             if (unUserPosition.contains(s)) {
                 newPosition = Integer.valueOf(s);
+                break;
             }
         }
         if (newPosition != 0) {

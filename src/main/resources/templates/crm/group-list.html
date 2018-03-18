@@ -6,7 +6,7 @@
     <p th:replace="crm/comm/_meta :: meta"/>
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 会员管理 <a
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 分组列表 <a
         class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
         href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
@@ -16,42 +16,30 @@
         -
         <input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'dateMax\')}',maxDate:'%y-%M-%d' })" id="dateMax"
                class="input-text Wdate" style="width:120px;"/>
-        <input type="text" class="input-text" style="width:250px" placeholder="输入会员账号、名称、电话、邮箱" id="searchContent"/>
-        <button type="button" class="btn btn-success radius" id="searchBtn"><i class="Hui-iconfont">&#xe665;</i> 搜会员
+        <input type="text" class="input-text" style="width:250px" placeholder="输入会员名称" id="searchContent"/>
+        <button type="button" class="btn btn-success radius" id="searchBtn"><i class="Hui-iconfont">&#xe665;</i> 搜分组
         </button>
         <input type="hidden" id="tokenName" th:value="${_csrf.parameterName}"/>
         <input type="hidden" id="tokenValue" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     </div>
-    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="l"><a
-            href="javascript:;" onclick="layer_show('添加会员','/member/add','','510')"
-            class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加会员</a></span></div>
     <div class="mt-20">
         <table class="table table-border table-bordered table-hover table-bg table-sort">
             <thead>
             <tr class="text-c">
-                <th width="80">邀请人</th>
-                <th width="100">姓名</th>
-                <th width="40">性别</th>
-                <th width="90">手机</th>
-                <th width="150">邮箱</th>
-                <th width="100">地址</th>
-                <th width="130">加入时间</th>
-                <th width="20">操作</th>
+                <th width="100">分组</th>
+                <th width="20">当前人数</th>
+                <th width="200">成员</th>
+                <th width="150">创建时间</th>
+                <th width="50">状态</th>
             </tr>
             </thead>
             <tbody id="member-list-body">
             <tr class="text-c">
-                <td>wlrllr</td>
-                <td>张三</td>
-                <td>男</td>
-                <td>13000000000</td>
-                <td>admin@mail.com</td>
-                <td class="text-l">北京市 海淀区</td>
-                <td>2014-6-11 11:11:42</td>
-                <td class="td-manage">
-                    <a title="编辑" href="javascript:layer_show('编辑','/member/update/','','510');"
-                       class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
-                </td>
+                <td>223242342</td>
+                <td>2</td>
+                <td>张三，李四</td>
+                <td>2014-6-11</td>
+                <td>启用</td>
             </tr>
             </tbody>
         </table>
@@ -67,7 +55,7 @@
         var dataTable = $('.table-sort').dataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": function (data, callback, settings) {  //ajax方式向后台发送请求
+            "ajax": function (data, callback) {  //ajax方式向后台发送请求
                 var param = {};
                 param.pageSize = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
                 param.pageNum = (data.start / data.length) + 1;//当前页码
@@ -77,12 +65,10 @@
                 param.dateMax = $('#dateMax').val();
                 $.ajax({
                     "type": "POST",
-                    "url": "/member/list",
+                    "url": "/member/listGroup",
                     "data": param,
                     "dataType": "json",
                     success: function (data) {
-                        console.log(data);
-
                         var returnData = {};
                         returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
                         returnData.recordsTotal = data.content;//返回数据全部记录
@@ -94,40 +80,28 @@
 
             },
             "columns": [//对接收到的json格式数据进行处理，data为json中对应的key
-                {"data": "parentName"},
                 {"data": "name"},
-                {"data": null},
-                {"data": "phone"},
-                {"data": "idCard"},
-                {"data": "address"},
+                {"data": "currentSize"},
+                {"data": 'member'},
                 {"data": "createTime"},
                 {"data": null}
             ],
             "columnDefs": [{
-                targets: 2,
+                targets: 4,
                 render: function (data, type, row, meta) {
-                   if(row.sex == 'G'){
-                       return "女";
-                   }else if(row.sex == 'B'){
-                       return "男";
-                   }else{
-                       return "保密";
+                   if(row.status == 'Y'){
+                       return "激活";
+                   }else if(row.sex == ''){
+                       return "满员";
                    }
-                }
-            }, {
-                targets: 7,
-                render: function (data, type, row, meta) {
-                    return '<a title="编辑" href="javascript:layer_show(\'编辑\',\'/member/edit/' + row.memberId + '\',\'\',\'490\');" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>';
                 }
             }]
         });
-        dataTable.api();
+        //dataTable.api();
         $('#searchBtn').on('click', function () {
             dataTable.fnDraw(true);
         });
     });
-
-    //FIXME 监听layer关闭，然后刷新该页面
 </script>
 </body>
 </html>

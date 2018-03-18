@@ -1,5 +1,7 @@
 package club.starcard.modules.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,49 +16,64 @@ import java.util.Date;
 @Table(name = "CRM_MEMBER")
 @Entity
 @lombok.Data
-public class Member  implements Serializable {
+public class Member extends BaseEntity implements Serializable {
+
+
     @Id
-    @Column(name="MEMBER_ID")
+    @Column(name = "MEMBER_ID")
     private Long memberId;
+
     /**
      * 邀请人
      */
-    @Column(name="PARENT_ID")
+    @Column(name = "PARENT_ID")
     private Long parentId;
+
+    @Column(name = "PARENT_NAME")
+    private String parentName;
     /**
      * 昵称
      */
-    @Column(name="NICK_NAME")
+    @Column(name = "NICK_NAME")
     private String nickName;
 
-    @Column(name="NAME")
+    @Column(name = "NAME")
     private String name;
-    @Column(name="SEX")
-    private String sex;
-    @Column(name="CITY")
-    private String city;
 
-    @Column(name="ID_CARD")
+    @Column(name = "SEX")
+    private String sex;
+
+    @Column(name = "ADDRESS")
+    private String address;
+
+    @Column(name = "ID_CARD")
     private String idCard;
 
-    @Column(name="PHONE")
+    @Column(name = "PHONE")
     private String phone;
 
-    @Column(name="EMAIL")
+    @Column(name = "EMAIL")
     private String email;
+
+    @Column(name="BANK_ACCOUNT")
+    private String bankAccount;
+
+    @Column(name="BANK_NAME")
+    private String bankName;
 
     /**
      * 入伙金额
      */
-    @Column(name="MONEY")
+    @Column(name = "MONEY")
     private Double money;
 
     /**
      * 入會时间
      */
-    @Column(name="CREATE_TIME")
+    @Column(name = "CREATE_TIME")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private Date createTime;
 
-    @Column(name="REMARK")
+    @Column(name = "REMARK")
     private String remark;
 }

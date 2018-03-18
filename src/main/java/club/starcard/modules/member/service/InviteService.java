@@ -10,5 +10,5 @@ public interface InviteService {
 
     boolean qualifying(Member member);
 
-    boolean crmOpen(MemberVo vo);
+    boolean crmOpen(Member member);
 }

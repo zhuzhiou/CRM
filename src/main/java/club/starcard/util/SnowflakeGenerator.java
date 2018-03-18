@@ -6,9 +6,9 @@ package club.starcard.util;
 public class SnowflakeGenerator {
 
     /**
-     * 开始时间截 (2015-01-01)
+     * 开始时间截 (2018-03-18)
      */
-    private final long twepoch = 1420041600000L;
+    private final long twepoch = 1521364521131L;
 
     /**
      * 机器id所占的位数
@@ -161,6 +161,7 @@ public class SnowflakeGenerator {
      * 测试
      */
     public static void main(String[] args) {
+        System.out.println(System.currentTimeMillis());
         SnowflakeGenerator idWorker = new SnowflakeGenerator(0, 0);
         for (int i = 0; i < 1000; i++) {
             long id = idWorker.nextId();

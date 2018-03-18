@@ -31,4 +31,6 @@ public class Group  implements Serializable {
     private Long memberId;
     @Transient
     private Integer position;
+    @Transient
+    private String member;
 }

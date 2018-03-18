@@ -1,5 +1,6 @@
 package club.starcard.modules.member.controller;
 
+import club.starcard.config.CommonConfig;
 import com.alibaba.fastjson.JSONObject;
 import club.starcard.modules.member.service.InviteService;
 import club.starcard.modules.member.vo.MemberVo;
@@ -22,6 +23,7 @@ public class CommonController {
 
     @Autowired
     private InviteService inviteService;
+
 
 
     @GetMapping("index")

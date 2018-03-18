@@ -10,7 +10,6 @@ spring:
             ddl-auto: update
             dialect: org.hibernate.dialect.MySQL5Dialect
     thymeleaf:
-        mode: HTML5
         cache: false
 server:
     port: 8080
@@ -26,12 +25,22 @@ crm:
    # deMergeGroup:
       #     - {1: 2,2: 4,3: 5}
       #     - {1: 3,2: 6,3: 7}
+    groupPosition:
+        [1,2,3,4,5,6,7]
     initPoint: 0
     rewardMember: 2000
     rewardParent: 6000
-security:
-  headers:
-    frame: true
-  basic:
-    enabled: false
+    banks:
+        - {code: ABC,name: 中国农业银行}
+        - {code: BOC,name: 中国银行}
+        - {code: COMM,name: 交通银行}
+        - {code: CCB,name: 中国建设银行}
+        - {code: CEB,name: 中国光大银行}
+        - {code: CIB,name: 兴业银行}
+        - {code: CMB,name: 招商银行}
+        - {code: CMBC,name: 民生银行}
+        - {code: ICBC,name: 中国工商银行}
+        - {code: SPDB,name: 浦发银行}
+        - {code: HXB,name: 华夏银行}
+        - {code: PINGANBK,name: 平安银行}
 
