@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author zhuzhiou
  */
-@RequestMapping("/admin/user")
+@RequestMapping("/user")
 @Controller
 public class SysUserController {
 
