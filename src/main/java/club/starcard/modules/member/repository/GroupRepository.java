@@ -2,6 +2,7 @@ package club.starcard.modules.member.repository;
 
 import club.starcard.modules.member.entity.Group;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -36,6 +37,7 @@ public interface GroupRepository extends JpaRepository<Group,Long> {
     @Query("select gm.memberId,g.groupId,gm.position,g.groupSize,g.currentSize from Group g,GroupMember gm where g.id=gm.groupId and g.status='Y' order by g.groupId asc ")
     List<Object[]> findLastGroup();
 
-    @Query(nativeQuery=true,value="SELECT g.group_id,g.name,g.current_size,g.`status`, GROUP_CONCAT(m.`name`) as member,g.create_time FROM crm_group g, crm_group_member gm, crm_member m WHERE g.group_id = gm.group_id AND gm.member_id = m.member_id AND m.name LIKE '%%' GROUP BY group_id")
-    List<Object[]> page(String name);
+    @Query(nativeQuery=true,value="SELECT g.group_id,g.name,g.current_size,g.status, GROUP_CONCAT(m.name) as member,g.create_time FROM crm_group g, crm_group_member gm, crm_member m WHERE g.group_id = gm.group_id AND gm.member_id = m.member_id AND m.name LIKE ?1 GROUP BY group_id \n#pageable\n"
+            ,countQuery = "SELECT count(1) FROM ( SELECT g.group_id, g. NAME, g.current_size, g.status, GROUP_CONCAT(m.name) AS member, g.create_time FROM crm_group g, crm_group_member gm, crm_member m WHERE g.group_id = gm.group_id AND gm.member_id = m.member_id AND m.name LIKE ?1 GROUP BY group_id ) t")
+    Page<Object[]> page(String name, Pageable pageable);
 }

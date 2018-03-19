@@ -9,6 +9,29 @@
 */
 var num=0,oUl=$("#min_title_list"),hide_nav=$("#Hui-tabNav");
 
+//dataTable分页信息
+var lang = {
+    "sProcessing": "处理中...",
+    "sLengthMenu": "每页 _MENU_ 项",
+    "sZeroRecords": "没有匹配结果",
+    "sInfo": "当前显示第 _START_ 至 _END_ 项，共 _MAX_ 项",
+    "sInfoEmpty": "当前显示第 0 至 0 项，共 0 项",
+    "sInfoFiltered": "",
+    "sInfoPostFix": "",
+    "sSearch": "搜索:",
+    "sUrl": "",
+    "sEmptyTable": "数据为空",
+    "sLoadingRecords": "载入中...",
+    "sInfoThousands": ",",
+    "oPaginate": {
+        "sFirst": "首页",
+        "sPrevious": "上页",
+        "sNext": "下页",
+        "sLast": "末页",
+        "sJump": "跳转"
+    }
+};
+
 /*获取顶部选项卡总长度*/
 function tabNavallwidth(){
 	var taballwidth=0,

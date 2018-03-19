@@ -31,6 +31,11 @@ public class CommonController {
        return "crm/index";
     }
 
+    @GetMapping("")
+    public String login() {
+        return "login";
+    }
+
     /**
      * 测试页面用
      * @param pageName

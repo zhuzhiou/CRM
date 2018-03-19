@@ -1,0 +1,47 @@
+﻿<!DOCTYPE HTML>
+<html lang="cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link type="image/x-icon" th:src="@{favicon.ico}" rel="shortcut icon"/>
+  <title>CRM后台登录页面</title>
+  <p th:replace="/crm/comm/_meta :: meta"/>
+  <link th:href="@{/h-ui.admin/css/H-ui.login.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<input type="hidden" id="TenantId" name="TenantId" value="" />
+<div class="header"></div>
+<div class="loginWraper">
+  <div id="loginform" class="loginBox">
+    <form class="form form-horizontal" th:action="@{/index}" method="get">
+      <div class="row cl">
+        <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
+        <div class="formControls col-xs-8">
+          <input name="loginName" type="text" placeholder="账户" class="input-text size-L"/>
+        </div>
+      </div>
+      <div class="row cl">
+        <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
+        <div class="formControls col-xs-8">
+          <input name="password" type="password" placeholder="密码" class="input-text size-L"/>
+        </div>
+      </div>
+      <div class="row cl">
+        <div class="formControls col-xs-8 col-xs-offset-3">
+          <label for="online">
+            <input type="checkbox" name="online" id="online" value=""/>
+            使我保持登录状态</label>
+        </div>
+      </div>
+      <div class="row cl">
+        <div class="formControls col-xs-8 col-xs-offset-3">
+          <input type="submit" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;"/>
+          <input name="" type="reset" class="btn btn-default radius size-L" value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;"/>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="footer">Copyright 星卡致富 by wlrllr</div>
+<script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/h-ui/js/H-ui.min.js"></script>
+</body>
+</html>

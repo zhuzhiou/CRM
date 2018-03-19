@@ -1,7 +1,6 @@
 ﻿<!DOCTYPE HTML>
 <html lang="cn" xmlns:th="http://www.thymeleaf.org">
 <head>
-
     <title>会员管理</title>
     <p th:replace="crm/comm/_meta :: meta"/>
 </head>
@@ -65,9 +64,11 @@
 <script type="text/javascript">
     $(function () {
         var dataTable = $('.table-sort').dataTable({
+            language:lang,
             "processing": true,
             "serverSide": true,
-            "ajax": function (data, callback, settings) {  //ajax方式向后台发送请求
+            "searching": false,
+            "ajax": function (data, callback,setting) {  //ajax方式向后台发送请求
                 var param = {};
                 param.pageSize = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
                 param.pageNum = (data.start / data.length) + 1;//当前页码
@@ -80,14 +81,12 @@
                     "url": "/member/list",
                     "data": param,
                     "dataType": "json",
-                    success: function (data) {
-                        console.log(data);
-
+                    success: function (res) {
                         var returnData = {};
-                        returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
-                        returnData.recordsTotal = data.content;//返回数据全部记录
-                        returnData.recordsFiltered = data.total;//后台不实现过滤功能，每次查询均视作全部结果
-                        returnData.data = data.content;//返回的数据列表
+                        returnData.draw = res.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                        returnData.iTotalRecords = res.totalElements;//返回数据全部记录
+                        returnData.iTotalDisplayRecords = res.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
+                        returnData.aaData = res.content;//返回的数据列表
                         callback(returnData)
                     }
                 })

@@ -6,12 +6,10 @@ import club.starcard.modules.member.repository.GroupRepository;
 import club.starcard.modules.member.service.GroupService;
 import club.starcard.modules.member.specification.CrmSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +40,11 @@ public class GroupServiceImpl implements GroupService {
         //pageable从0页开始
         Pageable pageable = new PageRequest(pageNum - 1, pageSize);
         //FIXME 这个sql还没搞定啊
-        return repository.findAll(pageable);
+        //return repository.findAll(pageable);
+        Page<Object[]> page = repository.page("%"+search+"%",pageable);
+        List<Group> list = covertPageData(page);
+        return new PageImpl(list,pageable,page.getTotalElements());
+        //return repository.findAll(pageable);
         //return null;//repository.findAll(CrmSpecification.queryMemberSpecification(beginDate, endDate, search), pageable);
     }
 
@@ -56,13 +58,32 @@ public class GroupServiceImpl implements GroupService {
         return covertData(repository.findLastGroup());
     }
 
+    private List<Group> covertPageData(Page<Object[]> data){
+        List<Group> list = new ArrayList<>();
+        List<Object[]> content = data.getContent();
+        if(data != null && content.size()>0){
+            for(Object[] obj : data){
+                Group g = new Group();
+                BigInteger groupId = (BigInteger)obj[0];
+                g.setGroupId(groupId.longValue());
+                g.setName((String)obj[1]);
+                g.setCurrentSize((Integer)obj[2]);
+                g.setStatus((String)obj[3]);
+                g.setMember((String)obj[4]);
+                g.setCreateTime((Date)obj[5]);
+                list.add(g);
+            }
+        }
+        return list;
+    }
+
     private List<Group> covertData(List<Object[]> data){
         List<Group> list = new ArrayList<>();
         if(data != null && data.size()>0){
             for(Object[] obj : data){
                 Group g = new Group();
-                g.setMemberId((Long)obj[0]);
-                g.setGroupId((Long)obj[1]);
+                g.setMemberId(((BigInteger)obj[0]).longValue());
+                g.setGroupId(((BigInteger)obj[1]).longValue());
                 g.setPosition((Integer)obj[2]);
                 g.setGroupSize((Integer)obj[3]);
                 g.setCurrentSize((Integer)obj[4]);
