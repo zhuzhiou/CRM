@@ -19,6 +19,10 @@ public class CommonConstant {
      */
     public static final String GROUP_STATUS_N = "N";
 
+    public static final String POINT_OPERATE_ADD = "ADD";
+
+    public static final String POINT_OPERATE_MINUS = "MINUS";
+
     public static List<Map<Integer, Integer>> deMergeGroup;
 
     static {

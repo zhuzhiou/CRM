@@ -30,7 +30,6 @@
                 <th width="20">当前人数</th>
                 <th width="200">成员</th>
                 <th width="150">创建时间</th>
-                <th width="50">状态</th>
             </tr>
             </thead>
             <tbody id="member-list-body">
@@ -39,7 +38,6 @@
                 <td>2</td>
                 <td>张三，李四</td>
                 <td>2014-6-11</td>
-                <td>启用</td>
             </tr>
             </tbody>
         </table>
@@ -82,20 +80,15 @@
 
             },
             "columns": [//对接收到的json格式数据进行处理，data为json中对应的key
-                {"data": "name"},
+                {"data": null},
                 {"data": "currentSize"},
                 {"data": 'member'},
-                {"data": "createTime"},
-                {"data": null}
+                {"data": "createTime"}
             ],
             "columnDefs": [{
-                targets: 4,
-                render: function (data, type, row, meta) {
-                   if(row.status == 'Y'){
-                       return "激活";
-                   }else if(row.sex == ''){
-                       return "满员";
-                   }
+                targets: 0,
+                render: function (data, type, row) {
+                    return '<a href="javascript:layer_full(\'组详情\',\'/member/detailGroup/' + row.groupId+'\');">'+row.name+'</a>';
                 }
             }]
         });

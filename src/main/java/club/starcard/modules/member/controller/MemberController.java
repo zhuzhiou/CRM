@@ -137,22 +137,30 @@ public class MemberController {
 
     @PostMapping("listGroup")
     @ResponseBody
-    public Page<Group> listGroup(String dateMin, String dateMax, String search,
-                                  Integer pageSize, Integer pageNum) {
-        Date beginDate = null;
-        Date endDate = null;
-        try {
-            if (StringUtils.isNotBlank(dateMin)) {
-                beginDate = sdf.parse(dateMin);
-            }
-            if (StringUtils.isNotBlank(dateMax)) {
-                endDate = sdf.parse(dateMax);
-            }
-        } catch (Exception e) {
-            logger.error("转换日期格式异常，继续查询", e);
-        }
-
-        Page<Group> page = groupService.page(beginDate, endDate, search, pageNum, pageSize);
+    public Page<Group> listGroup(String search,Integer pageSize, Integer pageNum) {
+        Page<Group> page = groupService.page(search, pageNum, pageSize);
         return page;
+    }
+
+    @GetMapping("detail/{memberId}")
+    public String detail(Model model, @PathVariable Long memberId) {
+        //用户详情
+        model.addAttribute("member",memberService.get(memberId));
+        //积分消费记录详情
+        model.addAttribute("pointLogs",memberService.findPointLogs(memberId));
+        //查询下线
+        model.addAttribute("childrenList",memberService.findByParentId(memberId));
+
+        return "crm/member-detail";
+    }
+
+    @GetMapping("detailGroup/{groupId}")
+    public String detailGroup(Model model, @PathVariable Long groupId) {
+        //分组详情
+        model.addAttribute("group",groupService.get(groupId));
+        //查询下线
+        model.addAttribute("memberList",memberService.findByGroupId(groupId));
+
+        return "crm/group-detail";
     }
 }

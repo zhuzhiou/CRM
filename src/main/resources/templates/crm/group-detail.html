@@ -1,0 +1,62 @@
+﻿<!DOCTYPE HTML>
+<html lang="cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>分组管理</title>
+    <p th:replace="crm/comm/_meta :: meta"/>
+</head>
+<body>
+<div class="page-container">
+    <p class="f-20 text-success">组信息</p>
+    <div class="portlet gren bg-white">
+        <div class="portlet-body" th:object="${group}">
+            <div class="form-horizontal form-horizontal-condensed">
+                <div class="col-md-4 form-group" >
+                    组名：<p th:text="*{name}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    组大小：<p th:text="*{groupSize}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    当前组成员：<p th:text="*{currentSize}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    成组时间：<p th:text="*{createTime}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    满员时间：<p th:text="*{endTime}"/>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <table class="table table-border table-bordered table-bg">
+        <thead>
+        <tr>
+            <th colspan="5" scope="col">组内会员</th>
+        </tr>
+        <tr class="text-c">
+            <th>姓名</th>
+            <th>邀请人</th>
+            <th>位置</th>
+            <th>电话</th>
+            <th>积分</th>
+            <th>住址</th>
+            <th>备注</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="child:${memberList}">
+            <td th:text="*{child.name}">姓名</td>
+            <td th:text="*{child.parentName}">邀请人</td>
+            <td th:text="*{child.position}">位置</td>
+            <td th:text="*{child.phone}">电话</td>
+            <td th:text="*{child.totalPoint}">积分</td>
+            <td th:text="*{child.address}">住址</td>
+            <td th:text="*{child.remark}">备注</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

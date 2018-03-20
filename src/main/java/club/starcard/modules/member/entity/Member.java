@@ -2,10 +2,7 @@ package club.starcard.modules.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -62,6 +59,22 @@ public class Member implements Serializable {
     private String bankName;
 
     /**
+     * 总共积分
+     */
+    @Column(name="TOTAL_POINT")
+    private Long totalPoint;
+    /**
+     * 可用积分
+     */
+    @Column(name="USABLE_POINT")
+    private Long usablePoint;
+    /**
+     * 不可用积分
+     */
+    @Column(name="UN_USABLE_POINT")
+    private Long unUsablePoint;
+
+    /**
      * 入伙金额
      */
     @Column(name = "MONEY")
@@ -76,4 +89,7 @@ public class Member implements Serializable {
 
     @Column(name = "REMARK")
     private String remark;
+
+    @Transient
+    private Integer position;
 }

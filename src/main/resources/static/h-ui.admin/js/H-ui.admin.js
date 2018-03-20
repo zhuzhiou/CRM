@@ -204,6 +204,27 @@ function removeIframeAll(){
 	}
 }
 
+/*弹出层 充满*/
+/*
+ 参数解释：
+ title	标题
+ url		请求的url
+ */
+function layer_full(title,url){
+    if (title == null || title == '') {
+        title=false;
+    };
+    if (url == null || url == '') {
+        url="404.html";
+    };
+    var index = layer.open({
+        type: 2,
+        title: title,
+        content: url
+    });
+    layer.full(index);
+}
+
 /*弹出层*/
 /*
 	参数解释：

@@ -1,0 +1,111 @@
+﻿<!DOCTYPE HTML>
+<html lang="cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>会员详情</title>
+    <p th:replace="crm/comm/_meta :: meta"/>
+    <style>
+        .form-horizontal>.form-group{
+            display: -webkit-box;
+        }
+    </style>
+</head>
+<body>
+<div class="page-container">
+    <p class="f-20 text-success">我的信息</p>
+    <div class="portlet gren bg-white">
+        <!--<div class="portlet-title">
+            <div class="caption">我的信息</div>
+        </div>-->
+        <div class="portlet-body" th:object="${member}">
+            <div class="form-horizontal form-horizontal-condensed">
+                <div class="col-md-4 form-group" >
+                    邀请人：<p th:text="*{parentName}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    姓名：<p th:text="*{name}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    昵称：<p th:text="*{nickName}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    手机号：<p th:text="*{phone}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    身份证：<p th:text="*{idCard}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    性别：<p th:text="*{sex == 'G'?'女':sex=='B'?'男':'保密'}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    银行卡：<p th:text="*{bankName}"/>/<p th:text="*{bankAccount}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    总共积分：<p th:text="*{totalPoint}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    可用积分：<p th:text="*{usablePoint}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    不可用积分：<p th:text="*{unUsablePoint}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    地址：<p th:text="*{address}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    入会时间：<p th:text="*{createTime}"/>
+                </div>
+                <div class="col-md-4 form-group" >
+                    备注：<p th:text="*{remark}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-border table-bordered table-bg">
+        <thead>
+        <tr>
+            <th colspan="5" scope="col">积分记录</th>
+        </tr>
+        <tr class="text-c">
+            <th>操作</th>
+            <th>数量</th>
+            <th>余额</th>
+            <th>操作时间</th>
+            <th>备注</th>
+        </tr>
+        </thead>
+        <tbody>
+           <tr th:each="log:${pointLogs}">
+               <td th:text="*{log.operateType == 'ADD'?'增入':'减出'}">操作</td>
+               <td th:text="*{log.operatePoint}">数量</td>
+               <td th:text="*{log.totalPoint}">余额</td>
+               <td th:text="*{log.createTime}">操作时间</td>
+               <td th:text="*{log.remark}">备注</td>
+           </tr>
+        </tbody>
+    </table>
+    <table class="table table-border table-bordered table-bg">
+        <thead>
+        <tr>
+            <th colspan="5" scope="col">我的下线</th>
+        </tr>
+        <tr class="text-c">
+            <th>姓名</th>
+            <th>电话</th>
+            <th>积分</th>
+            <th>住址</th>
+            <th>备注</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="child:${childrenList}">
+            <td th:text="*{child.name}">姓名</td>
+            <td th:text="*{child.phone}">电话</td>
+            <td th:text="*{child.totalPoint}">积分</td>
+            <td th:text="*{child.address}">住址</td>
+            <td th:text="*{child.remark}">备注</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

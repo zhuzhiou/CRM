@@ -5,15 +5,15 @@ import club.starcard.modules.member.constant.CommonConstant;
 import club.starcard.modules.member.entity.Group;
 import club.starcard.modules.member.entity.GroupMember;
 import club.starcard.modules.member.entity.Member;
-import club.starcard.modules.member.entity.Point;
+import club.starcard.modules.member.entity.PointLog;
 import club.starcard.modules.member.repository.GroupMemberRepository;
 import club.starcard.modules.member.repository.GroupRepository;
 import club.starcard.modules.member.repository.MemberRepository;
-import club.starcard.modules.member.repository.PointRepository;
+import club.starcard.modules.member.repository.PointLogRepository;
 import club.starcard.modules.member.service.GroupService;
 import club.starcard.modules.member.service.InviteService;
+import club.starcard.modules.member.service.MemberService;
 import club.starcard.util.SnowflakeGenerator;
-import club.starcard.modules.member.vo.MemberVo;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +37,11 @@ public class InviteServiceImpl implements InviteService {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
+    private MemberService memberService;
+    @Autowired
     private GroupMemberRepository groupMemberRepository;
     @Autowired
-    private PointRepository pointRepository;
+    private PointLogRepository pointLogRepository;
     @Autowired
     private CommonConfig commonConfig;
     @Autowired
@@ -112,13 +114,19 @@ public class InviteServiceImpl implements InviteService {
             }
         }
         member.setCreateTime(new Date());
+        member.setTotalPoint(commonConfig.getInitPoint());
+        member.setUsablePoint(commonConfig.getInitPoint());
         memberRepository.save(member);
-        //新增会员积分
-        Point point = new Point();
-        point.setPointId(SnowflakeGenerator.generator());
-        point.setMemberId(member.getMemberId());
-        point.setInitPoint(commonConfig.getInitPoint());
-        pointRepository.save(point);
+        //新增积分变更记录
+        PointLog log = new PointLog();
+        log.setId(SnowflakeGenerator.generator());
+        log.setMemberId(member.getMemberId());
+        log.setTotalPoint(member.getTotalPoint());
+        log.setOperatePoint(member.getTotalPoint());
+        log.setOperateType(CommonConstant.POINT_OPERATE_ADD);
+        log.setCreateTime(new Date());
+        log.setRemark("新入会原初始积分");
+        pointLogRepository.save(log);
         return true;
     }
 
@@ -169,20 +177,22 @@ public class InviteServiceImpl implements InviteService {
         //设置该组已经满员
         groupRepository.filledGroup(new Date(), group.getGroupId());
         //查询位置为1的用户，并使其出局
-        Member member = memberRepository.find1ByGroupId(group.getGroupId());
-        reward(member);
-        if (member.getParentId() != null) {
-            qualifying(member.getMemberId(), member.getParentId());
-        } else {
-            //这里处理顶级会员
-            //查询最近可用的组，将顶级会员分配到该组
-            List<Group> groups = groupService.findLastGroup();
-            if (groups != null && groups.size() > 0) {
-                qualifying(member.getMemberId(), groups.get(0));
+        Member member = memberService.find1ByGroupId(group.getGroupId());
+        if(member != null){
+            reward(member);
+            if (member.getParentId() != null) {
+                qualifying(member.getMemberId(), member.getParentId());
+            } else {
+                //这里处理顶级会员
+                //查询最近可用的组，将顶级会员分配到该组
+                List<Group> groups = groupService.findLastGroup();
+                if (groups != null && groups.size() > 0) {
+                    qualifying(member.getMemberId(), groups.get(0));
+                }
             }
+            //分成两小组245一组，367一组
+            deMergeGroup(group.getGroupId());
         }
-        //分成两小组245一组，367一组
-        deMergeGroup(group.getGroupId());
     }
 
     /**
@@ -192,9 +202,9 @@ public class InviteServiceImpl implements InviteService {
      */
     private void reward(Member member) {
         if (member != null) {
-            pointRepository.addPoint(member.getMemberId(), commonConfig.getRewardMember());
+            memberService.rewardMember(member.getMemberId(),member.getTotalPoint(),commonConfig.getRewardMember(),"满组奖励");
             if (member.getParentId() != null) {
-                pointRepository.addPoint(member.getParentId(), commonConfig.getRewardParent());
+                memberService.rewardMember(member.getParentId(),member.getTotalPoint(),commonConfig.getRewardParent(),"满组奖励");
             }
         }
     }
