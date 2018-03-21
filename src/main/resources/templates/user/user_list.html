@@ -1,37 +1,85 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="cn" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <title>用户表单</title>
-    <link th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.css}" rel="stylesheet" />
+    <title>用户管理</title>
+    <p th:replace="crm/comm/_meta :: meta"/>
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-to">
-    <div class="container">
-        <div class="navbar-right">
-            <a href="#" th:href="@{/user/query}" role="button" class="btn btn-default navbar-btn">用户管理</a>
-            <a href="#" th:href="@{/role/query}" role="button" class="btn btn-default navbar-btn">角色管理</a>
-        </div>
-    </div>
-</nav>
-<div class="container">
-    <div class="row">
-        <table class="table table-bordered">
-            <tr>
-                <th>账号</th>
-                <th>是否有效</th>
-                <th>操作</th>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 用户管理 <a
+        class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+        href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+
+    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="l"><a
+            href="javascript:;" onclick="layer_show('添加用户','/user/form','','510')"
+            class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加用户</a></span></div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-hover table-bg table-sort">
+            <thead>
+            <tr class="text-c">
+                <th width="100">账号</th>
+                <th width="50">操作</th>
             </tr>
-            <tr th:each="sysUser:${sysUsers}">
-                <td th:text="${sysUser.username}">用户名</td>
-                <td th:text="${sysUser.enabled}">是否有效</td>
-                <td>
-                    <a href="/admin/user/form?userId=xxx" th:href="@{/admin/user/form(userid=${sysUser.id})}" role="button" class="btn btn-xs btn-danger">编辑</a>
-                    <a href="/admin/user/delete?userId=xxx" th:href="@{/user/disable(userid=${sysUser.id})}" role="button" class="btn btn-xs btn-danger">删除</a>
+            </thead>
+            <tbody id="member-list-body">
+            <tr class="text-c">
+                <td>张三</td>
+                <td class="td-manage">
+                    <a title="编辑" href="javascript:layer_show('编辑','/user/update','','510');"
+                       class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
                 </td>
             </tr>
+            </tbody>
         </table>
     </div>
 </div>
+<footer th:replace="crm/comm/_footer :: footer"/>
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script>
+<script th:inline="javascript">
+    $(function () {
+        var dataTable = $('.table-sort').dataTable({
+            language:lang,
+            "processing": true,
+            "serverSide": true,
+            "searching": false,
+            "ajax": function (data, callback,setting) {  //ajax方式向后台发送请求
+                var param = {};
+                param.pageSize = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+                param.pageNum = (data.start / data.length) + 1;//当前页码
+                param._csrf = [[${_csrf.token}]];
+                $.ajax({
+                    "type": "POST",
+                    "url": "/user/list",
+                    "data": param,
+                    "dataType": "json",
+                    success: function (res) {
+                        var returnData = {};
+                        returnData.draw = res.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                        returnData.iTotalRecords = res.totalElements;//返回数据全部记录
+                        returnData.iTotalDisplayRecords = res.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
+                        returnData.aaData = res.content;//返回的数据列表
+                        callback(returnData)
+                    }
+                })
+
+            },
+            "columns": [//对接收到的json格式数据进行处理，data为json中对应的key
+                {"data": "username"},
+            ],
+            "columnDefs": [{
+                targets: 1,
+                render: function (data, type, row, meta) {
+                    return '<a title="编辑" href="javascript:layer_show(\'编辑\',\'/member/form?userid=' + row.id + '\',\'\',\'490\');" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>';
+                }
+            }]
+        });
+        dataTable.api();
+    });
+
+    //FIXME 监听layer关闭，然后刷新该页面
+</script>
 </body>
 </html>

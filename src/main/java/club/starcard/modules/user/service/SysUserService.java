@@ -1,12 +1,12 @@
 package club.starcard.modules.user.service;
 
 import club.starcard.modules.user.entity.SysUser;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface SysUserService {
 
-    List<SysUser> getSysUsers();
+    Page<SysUser> getAllSysUsers(Pageable pageable);
 
     SysUser getSysUserByUserid(long userId);
 

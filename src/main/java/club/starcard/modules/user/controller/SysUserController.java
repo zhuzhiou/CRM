@@ -2,15 +2,18 @@ package club.starcard.modules.user.controller;
 
 import club.starcard.modules.user.entity.SysUser;
 import club.starcard.modules.user.service.SysUserService;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author zhuzhiou
@@ -23,37 +26,36 @@ public class SysUserController {
     private SysUserService sysUserService;
 
     @GetMapping(path = "/list")
-    public String list(Model model) {
-        List<SysUser> sysUsers = sysUserService.getSysUsers();
-        model.addAttribute("sysUsers", sysUsers);
+    public String listPage(Model model) {
+        //List<SysUser> sysUsers = sysUserServie.getSysUsers();
+        //model.addAttribute("sysUsers", sysUsers);
         return "user/user_list";
     }
 
+    @PostMapping(path = "/list")
+    @ResponseBody
+    public Page<SysUser> listData(@PageableDefault(size = 15) Pageable pageable) {
+        Page<SysUser> sysUsers = sysUserService.getAllSysUsers(pageable);
+        return sysUsers;
+    }
+
     @GetMapping(path = "/form")
-    public String form(@RequestParam(required = false) Long userid, Model model) {
-        SysUser sysUser;
-        if (userid != null) {
-            sysUser = sysUserService.getSysUserByUserid(userid);
-        } else {
-            sysUser = new SysUser();
-        }
-        model.addAttribute("sysUser", sysUser);
+    public String form() {
         return "user/user_form";
     }
 
-    @PostMapping(path = "/user/create")
-    public String create(SysUser sysUser) {
+    @PostMapping(path = "/add")
+    @ResponseBody
+    public JSONObject create(SysUser sysUser) {
+        JSONObject result = new JSONObject();
+        if (StringUtils.length(sysUser.getUsername()) != 11) {
+            return result.fluentPut("code", 1).fluentPut("message", "手机号不正确");
+        }
+        if (sysUserService.getSysUserByUsername(sysUser.getUsername()) != null) {
+            return result.fluentPut("code", 2).fluentPut("message", "用户已存在");
+        }
         sysUserService.saveSysUser(sysUser);
-        return "redirect:user/user_detail";
+        return result.fluentPut("code", 0);
     }
 
-    @PostMapping(path = "/user/update")
-    public String update(SysUser sysUser) {
-        return "redirect:user/user_detail";
-    }
-
-    @GetMapping(path = "/user/detail")
-    public String detail(@RequestParam String userid) {
-        return "user/user_detail";
-    }
 }
