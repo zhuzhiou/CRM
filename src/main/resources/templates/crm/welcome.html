@@ -12,7 +12,7 @@
     <table class="portlet-table table table-border table-bordered table-bg">
         <thead>
         <tr>
-            <th colspan="5" scope="col">组内会员</th>
+            <th colspan="5" scope="col">新进会员</th>
         </tr>
         <tr class="text-c">
             <th>姓名</th>
@@ -20,6 +20,7 @@
             <th>电话</th>
             <th>积分</th>
             <th>住址</th>
+            <th>入会时间</th>
             <th>备注</th>
         </tr>
         </thead>
@@ -30,6 +31,7 @@
             <td th:text="*{child.phone}">电话</td>
             <td th:text="*{child.totalPoint}">积分</td>
             <td th:text="*{child.address}">住址</td>
+            <td th:text="*{child.createTime}">入会时间</td>
             <td th:text="*{child.remark}">备注</td>
         </tr>
         </tbody>
