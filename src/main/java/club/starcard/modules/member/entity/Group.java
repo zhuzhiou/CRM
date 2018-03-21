@@ -1,5 +1,7 @@
 package club.starcard.modules.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -24,8 +26,10 @@ public class Group  implements Serializable {
     @Column(name = "CURRENT_SIZE")
     private Integer currentSize;
     @Column(name = "CREATE_TIME")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private Date createTime;
     @Column(name = "END_TIME")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private Date endTime;
     @Transient
     private Long memberId;

@@ -7,30 +7,37 @@
 </head>
 <body>
 <div class="page-container">
-    <p class="f-20 text-success">组信息</p>
-    <div class="portlet gren bg-white">
+    <div class="portlet bg-white">
+        <div class="portlet-title">
+            <div class="caption">组内信息</div>
+        </div>
         <div class="portlet-body" th:object="${group}">
-            <div class="form-horizontal form-horizontal-condensed">
+            <div class="form-horizontal">
                 <div class="col-md-4 form-group" >
-                    组名：<p th:text="*{name}"/>
+                    <div class="control-label col-xs-4 col-sm-3">组名：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{name}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    组大小：<p th:text="*{groupSize}"/>
+                    <div class="control-label col-xs-4 col-sm-3">组大小：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{groupSize}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    当前组成员：<p th:text="*{currentSize}"/>
+                    <div class="control-label col-xs-4 col-sm-3">成员数：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{currentSize}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    成组时间：<p th:text="*{createTime}"/>
+                    <div class="control-label col-xs-4 col-sm-3">创建时间：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{createTime}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    满员时间：<p th:text="*{endTime}"/>
+                    <div class="control-label col-xs-4 col-sm-3">满员时间：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{endTime}"/>
                 </div>
 
             </div>
         </div>
     </div>
-    <table class="table table-border table-bordered table-bg">
+    <table class="portlet-table table table-border table-bordered table-bg">
         <thead>
         <tr>
             <th colspan="5" scope="col">组内会员</th>

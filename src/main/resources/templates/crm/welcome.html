@@ -9,33 +9,28 @@
     <p class="f-20 text-success">欢迎进入后台！</p>
     <p>登录次数：18 </p>
     <p>上次登录IP：222.35.131.79.1 上次登录时间：2014-6-14 11:19:55</p>
-    <p class="f-20 text-success">我的積分：20000</p>
-    <table class="table table-border table-bordered table-bg">
+    <table class="portlet-table table table-border table-bordered table-bg">
         <thead>
         <tr>
-            <th colspan="3" scope="col">我邀請的會員</th>
+            <th colspan="5" scope="col">组内会员</th>
         </tr>
         <tr class="text-c">
-            <th>昵稱</th>
             <th>姓名</th>
-            <th>入會時間</th>
+            <th>邀请人</th>
+            <th>电话</th>
+            <th>积分</th>
+            <th>住址</th>
+            <th>备注</th>
         </tr>
         </thead>
         <tbody>
-        <tr class="text-c">
-            <td>zs</td>
-            <td>張三</td>
-            <td>2017-2-3</td>
-        </tr>
-        <tr class="text-c">
-            <td>zs</td>
-            <td>張三</td>
-            <td>2017-2-3</td>
-        </tr>
-        <tr class="text-c">
-            <td>zs</td>
-            <td>張三</td>
-            <td>2017-2-3</td>
+        <tr th:each="child:${memberList}">
+            <td th:text="*{child.name}">姓名</td>
+            <td th:text="*{child.parentName}">邀请人</td>
+            <td th:text="*{child.phone}">电话</td>
+            <td th:text="*{child.totalPoint}">积分</td>
+            <td th:text="*{child.address}">住址</td>
+            <td th:text="*{child.remark}">备注</td>
         </tr>
         </tbody>
     </table>
@@ -46,5 +41,6 @@
         <p>这里些系统部分说明</p>
     </div>
 </footer>
+<div class="footer">Copyright 广西星动名俱汽车服务有限公司 by wlrllr</div>
 </body>
 </html>

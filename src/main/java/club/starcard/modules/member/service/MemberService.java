@@ -4,6 +4,7 @@ package club.starcard.modules.member.service;
 import club.starcard.modules.member.entity.Member;
 import club.starcard.modules.member.entity.PointLog;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.List;
 public interface MemberService {
 
     Page<Member> page(Date beginDate, Date endDate, String search, Integer pageNum, Integer pageSize);
+
+    Page<Member> page(Member member, Pageable pageable);
 
     boolean updateSelection(Member member);
 

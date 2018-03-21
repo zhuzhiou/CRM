@@ -4,63 +4,72 @@
     <title>会员详情</title>
     <p th:replace="crm/comm/_meta :: meta"/>
     <style>
-        .form-horizontal>.form-group{
-            display: -webkit-box;
-        }
     </style>
 </head>
 <body>
 <div class="page-container">
-    <p class="f-20 text-success">我的信息</p>
-    <div class="portlet gren bg-white">
-        <!--<div class="portlet-title">
+    <div class="portlet bg-white">
+        <div class="portlet-title">
             <div class="caption">我的信息</div>
-        </div>-->
+        </div>
         <div class="portlet-body" th:object="${member}">
             <div class="form-horizontal form-horizontal-condensed">
                 <div class="col-md-4 form-group" >
-                    邀请人：<p th:text="*{parentName}"/>
+                    <div class="control-label col-xs-4 col-sm-3">邀请人：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{parentName}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    姓名：<p th:text="*{name}"/>
+                    <div class="control-label col-xs-4 col-sm-3">姓名：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{name}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    昵称：<p th:text="*{nickName}"/>
+                    <div class="control-label col-xs-4 col-sm-3">昵称：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{nickName}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    手机号：<p th:text="*{phone}"/>
+                    <div class="control-label col-xs-4 col-sm-3">手机号：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{phone}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    身份证：<p th:text="*{idCard}"/>
+                    <div class="control-label col-xs-4 col-sm-3">身份证：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{idCard}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    性别：<p th:text="*{sex == 'G'?'女':sex=='B'?'男':'保密'}"/>
+                    <div class="control-label col-xs-4 col-sm-3">性别：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{sex == 'G'?'女':sex=='B'?'男':'保密'}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    银行卡：<p th:text="*{bankName}"/>/<p th:text="*{bankAccount}"/>
+                    <div class="control-label col-xs-4 col-sm-3">银行卡：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{bankName +'/'+ bankAccount}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    总共积分：<p th:text="*{totalPoint}"/>
+                    <div class="control-label col-xs-4 col-sm-3">总共积分：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{totalPoint}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    可用积分：<p th:text="*{usablePoint}"/>
+                    <div class="form-label col-xs-4 col-sm-3">可用积分：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{usablePoint}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    不可用积分：<p th:text="*{unUsablePoint}"/>
+                    <div class="control-label col-xs-4 col-sm-3">固定积分：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{unUsablePoint}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    地址：<p th:text="*{address}"/>
+                    <div class="control-label col-xs-4 col-sm-3">地址：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{address}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    入会时间：<p th:text="*{createTime}"/>
+                    <div class="control-label col-xs-4 col-sm-3">入会时间：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{createTime}"/>
                 </div>
                 <div class="col-md-4 form-group" >
-                    备注：<p th:text="*{remark}"/>
+                    <div class="control-label col-xs-4 col-sm-3">备注：</div>
+                    <div class="col-xs-8 col-sm-9 form-control-static" th:text="*{remark}"/>
                 </div>
             </div>
         </div>
     </div>
-    <table class="table table-border table-bordered table-bg">
+    <table class="portlet-table table table-border table-bordered table-bg">
         <thead>
         <tr>
             <th colspan="5" scope="col">积分记录</th>
@@ -74,16 +83,16 @@
         </tr>
         </thead>
         <tbody>
-           <tr th:each="log:${pointLogs}">
-               <td th:text="*{log.operateType == 'ADD'?'增入':'减出'}">操作</td>
-               <td th:text="*{log.operatePoint}">数量</td>
-               <td th:text="*{log.totalPoint}">余额</td>
-               <td th:text="*{log.createTime}">操作时间</td>
-               <td th:text="*{log.remark}">备注</td>
-           </tr>
+        <tr th:each="log:${pointLogs}">
+            <td th:text="*{log.operateType == 'ADD'?'增入':'减出'}">操作</td>
+            <td th:text="*{log.operatePoint}">数量</td>
+            <td th:text="*{log.totalPoint}">余额</td>
+            <td th:text="*{log.createTime}">操作时间</td>
+            <td th:text="*{log.remark}">备注</td>
+        </tr>
         </tbody>
     </table>
-    <table class="table table-border table-bordered table-bg">
+    <table class="portlet-table table table-border table-bordered table-bg">
         <thead>
         <tr>
             <th colspan="5" scope="col">我的下线</th>
@@ -106,6 +115,7 @@
         </tr>
         </tbody>
     </table>
+
 </div>
 </body>
 </html>

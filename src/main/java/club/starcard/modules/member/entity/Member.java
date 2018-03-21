@@ -58,6 +58,10 @@ public class Member implements Serializable {
     @Column(name="BANK_NAME")
     private String bankName;
 
+    @Column(name="BANK_CODE")
+    private String bankCode;
+
+
     /**
      * 总共积分
      */

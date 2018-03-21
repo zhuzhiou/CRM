@@ -19,6 +19,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wlrllr on 2018/3/14.
@@ -30,6 +31,8 @@ public class MemberServiceImpl implements MemberService {
     private MemberRepository repository;
     @Autowired
     private PointLogRepository pointLogRepository;
+    @Autowired
+    private CommonConfig commonConfig;
 
     @Override
     public Page<Member> page(Date beginDate, Date endDate, String search, Integer pageNum, Integer pageSize) {
@@ -39,6 +42,11 @@ public class MemberServiceImpl implements MemberService {
         //pageable从0页开始
         Pageable pageable = new PageRequest(pageNum - 1, pageSize);
         return repository.findAll(CrmSpecification.queryMemberSpecification(beginDate, endDate, search), pageable);
+    }
+
+    @Override
+    public Page<Member> page(Member member, Pageable pageable) {
+        return repository.findAll(Example.of(member),pageable);
     }
 
     @Override
@@ -55,14 +63,15 @@ public class MemberServiceImpl implements MemberService {
             m.setRemark(member.getRemark());
         if (StringUtils.isNotBlank(member.getPhone()))
             m.setPhone(member.getPhone());
-        if (StringUtils.isNotBlank(member.getBankName()))
-            m.setBankName(member.getBankName());
         if (StringUtils.isNotBlank(member.getBankAccount()))
             m.setBankAccount(member.getBankAccount());
         if(StringUtils.isNotBlank(member.getSex()))
             m.setSex(member.getSex());
-        if(StringUtils.isNotBlank(member.getNickName())){
+        if(StringUtils.isNotBlank(member.getNickName()))
             m.setNickName(member.getNickName());
+        if (StringUtils.isNotBlank(member.getBankCode())){
+            m.setBankCode(member.getBankCode());
+            member.setBankName(commonConfig.getBankName(member.getBankCode()));
         }
         repository.save(m);
         return true;

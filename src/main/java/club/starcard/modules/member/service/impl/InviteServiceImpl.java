@@ -15,6 +15,7 @@ import club.starcard.modules.member.service.InviteService;
 import club.starcard.modules.member.service.MemberService;
 import club.starcard.util.SnowflakeGenerator;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,7 @@ public class InviteServiceImpl implements InviteService {
         member.setCreateTime(new Date());
         member.setTotalPoint(commonConfig.getInitPoint());
         member.setUsablePoint(commonConfig.getInitPoint());
+        member.setBankName(commonConfig.getBankName(member.getBankCode()));
         memberRepository.save(member);
         //新增积分变更记录
         PointLog log = new PointLog();
@@ -178,7 +180,7 @@ public class InviteServiceImpl implements InviteService {
         groupRepository.filledGroup(new Date(), group.getGroupId());
         //查询位置为1的用户，并使其出局
         Member member = memberService.find1ByGroupId(group.getGroupId());
-        if(member != null){
+        if (member != null) {
             reward(member);
             if (member.getParentId() != null) {
                 qualifying(member.getMemberId(), member.getParentId());
@@ -202,9 +204,9 @@ public class InviteServiceImpl implements InviteService {
      */
     private void reward(Member member) {
         if (member != null) {
-            memberService.rewardMember(member.getMemberId(),member.getTotalPoint(),commonConfig.getRewardMember(),"满组奖励");
+            memberService.rewardMember(member.getMemberId(), member.getTotalPoint(), commonConfig.getRewardMember(), "满组奖励");
             if (member.getParentId() != null) {
-                memberService.rewardMember(member.getParentId(),member.getTotalPoint(),commonConfig.getRewardParent(),"满组奖励");
+                memberService.rewardMember(member.getParentId(), member.getTotalPoint(), commonConfig.getRewardParent(), "满组奖励");
             }
         }
     }
@@ -259,17 +261,17 @@ public class InviteServiceImpl implements InviteService {
         Integer position = group.getPosition();
         List<Integer> unUserPosition = commonConfig.getGroupPosition();
         //查询所有已占位置
-        if(group.getGroupId() != null){
+        if (group.getGroupId() != null) {
             List<GroupMember> list = groupMemberRepository.findByGroupId(group.getGroupId());
-            if(list != null && list.size()>0){
-               for(GroupMember gm : list){
-                   if(unUserPosition.contains(gm.getPosition())){
-                       unUserPosition.remove(gm.getPosition());
-                   }
-               }
+            if (list != null && list.size() > 0) {
+                for (GroupMember gm : list) {
+                    if (unUserPosition.contains(gm.getPosition())) {
+                        unUserPosition.remove(gm.getPosition());
+                    }
+                }
             }
-            logger.info("用户排位，组内空闲位置【{}】,组【{}】", JSONObject.toJSONString(unUserPosition),group.getGroupId());
-        }else{
+            logger.info("用户排位，组内空闲位置【{}】,组【{}】", JSONObject.toJSONString(unUserPosition), group.getGroupId());
+        } else {
             logger.error("用户排位失败，组ID为空，邀请人【{}】，会员【{}】", group.getMemberId(), memberId);
             return false;
         }

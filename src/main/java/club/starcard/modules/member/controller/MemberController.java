@@ -12,11 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 @RequestMapping("/member/")
@@ -63,6 +67,7 @@ public class MemberController {
 
     @GetMapping("edit/{memberId}")
     public String editView(Model model, @PathVariable Long memberId) {
+        model.addAttribute("open", true);
         model.addAttribute("member", memberService.get(memberId));
         model.addAttribute("banks", config.getBanks());
         return "crm/member-add";
@@ -145,7 +150,8 @@ public class MemberController {
     @GetMapping("detail/{memberId}")
     public String detail(Model model, @PathVariable Long memberId) {
         //用户详情
-        model.addAttribute("member",memberService.get(memberId));
+        Member member = memberService.get(memberId);
+        model.addAttribute("member",member);
         //积分消费记录详情
         model.addAttribute("pointLogs",memberService.findPointLogs(memberId));
         //查询下线
@@ -158,7 +164,7 @@ public class MemberController {
     public String detailGroup(Model model, @PathVariable Long groupId) {
         //分组详情
         model.addAttribute("group",groupService.get(groupId));
-        //查询下线
+        //查询组内成员
         model.addAttribute("memberList",memberService.findByGroupId(groupId));
 
         return "crm/group-detail";
