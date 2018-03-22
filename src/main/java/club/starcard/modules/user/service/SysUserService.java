@@ -13,4 +13,6 @@ public interface SysUserService {
     SysUser getSysUserByUsername(String username);
 
     void saveSysUser(SysUser sysUser);
+
+    void deleteSysUser(Long userid);
 }

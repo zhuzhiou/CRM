@@ -10,10 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zhuzhiou
@@ -59,4 +56,15 @@ public class SysUserController {
         return result.fluentPut("code", 0);
     }
 
+    @PostMapping(path = "/delete")
+    @ResponseBody
+    public JSONObject delete(@RequestParam long id) {
+        JSONObject result = new JSONObject();
+        try {
+            sysUserService.deleteSysUser(id);
+            return result.fluentPut("code", 0);
+        } catch (Exception e) {
+            return result.fluentPut("code", 1).fluentPut("message", e.getMessage());
+        }
+    }
 }

@@ -72,13 +72,31 @@
             "columnDefs": [{
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return '<a title="编辑" href="javascript:layer_show(\'编辑\',\'/user/form?userid=' + row.id + '\',\'\',\'490\');" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>';
+                    return '<a title="删除" href="###" onclick="deleteUser(' + row.id + ');" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>';
                 }
             }]
         });
         dataTable.api();
     });
 
+    function deleteUser(id) {
+        layer.msg('你确定要删除账号么？', {
+            time: 0 //不自动关闭
+            ,btn: ['删除', '取消']
+            ,yes: function(index){
+                layer.close(index);
+                $.ajax({
+                    url: '/user/delete',
+                    method: 'POST',
+                    data: {id: id, [[${_csrf.parameterName}]]: [[${_csrf.token}]]}
+                }).success(function (data) {
+                    if (data.code == 0) {
+                        layer.msg("删除成功");
+                    }
+                })
+            }
+        });
+    };
     //FIXME 监听layer关闭，然后刷新该页面
 </script>
 </body>
