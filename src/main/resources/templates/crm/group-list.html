@@ -14,7 +14,6 @@
         <input type="text" class="input-text" style="width:250px" placeholder="输入会员名称" id="searchContent"/>
         <button type="button" class="btn btn-success radius" id="searchBtn"><i class="Hui-iconfont">&#xe665;</i> 搜分组
         </button>
-        <input type="hidden" id="tokenName" th:value="${_csrf.parameterName}"/>
         <input type="hidden" id="tokenValue" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     </div>
     <div class="mt-20">

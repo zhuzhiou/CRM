@@ -18,7 +18,6 @@
         <input type="text" class="input-text" style="width:250px" placeholder="输入会员账号、名称、电话、邮箱" id="searchContent"/>
         <button type="button" class="btn btn-success radius" id="searchBtn"><i class="Hui-iconfont">&#xe665;</i> 搜会员
         </button>
-        <input type="hidden" id="tokenName" th:value="${_csrf.parameterName}"/>
         <input type="hidden" id="tokenValue" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     </div>
     <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="l"><a

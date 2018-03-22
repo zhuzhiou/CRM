@@ -49,6 +49,7 @@
                 var param = {};
                 param.pageSize = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
                 param.pageNum = (data.start / data.length) + 1;//当前页码
+                param._csrf = [[${_csrf.token}]];
                 $.ajax({
                     "type": "POST",
                     "url": "/user/list",
@@ -71,7 +72,7 @@
             "columnDefs": [{
                 targets: 1,
                 render: function (data, type, row, meta) {
-                    return '<a title="编辑" href="javascript:layer_show(\'编辑\',\'/member/form?userid=' + row.id + '\',\'\',\'490\');" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>';
+                    return '<a title="编辑" href="javascript:layer_show(\'编辑\',\'/user/form?userid=' + row.id + '\',\'\',\'490\');" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>';
                 }
             }]
         });

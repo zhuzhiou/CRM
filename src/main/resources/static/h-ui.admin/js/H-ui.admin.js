@@ -375,8 +375,8 @@ $(function(){
             ,btn: ['退出', '取消']
             ,yes: function(index){
                 layer.close(index);
-                location.href = "/logout";
+                $('#logoutForm').submit();
             }
         });
     });
-}); 
+});

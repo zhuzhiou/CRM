@@ -12,6 +12,9 @@
     <meta name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
     <!--[if lt IE 9]>
     <script type="text/javascript" th:src="@{lib/html5shiv.js}"></script>
     <script type="text/javascript" th:src="@{lib/respond.min.js}"></script>
