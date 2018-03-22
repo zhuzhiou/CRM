@@ -4,6 +4,7 @@ import club.starcard.modules.member.entity.Member;
 import club.starcard.modules.member.service.InviteService;
 import club.starcard.modules.member.service.MemberService;
 import club.starcard.modules.member.vo.MemberVo;
+import club.starcard.modules.user.entity.SysUser;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +36,11 @@ public class CommonController {
 
     @GetMapping("index")
     public String index(Model model) {
+        //获取登录用户信息
+        SysUser user = (SysUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("sysUser",user);
+        //获取菜单栏
+
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         Pageable pageable = new PageRequest(0,20,sort);
         Page<Member> page = memberService.page(new Member(),pageable);

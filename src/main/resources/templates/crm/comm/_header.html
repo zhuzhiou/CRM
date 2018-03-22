@@ -21,10 +21,10 @@
             </nav>
             <!-- 登陆用户信息 -->
             <nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
-                <ul class="cl">
-                    <li>超级管理员</li>
-                    <li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A">admin <i class="Hui-iconfont">&#xe6d5;</i></a>
-                        <ul class="dropDown-menu menu radius box-shadow">
+                <ul class="cl" th:object="${sysUser}">
+                    <li th:text="*{username}"></li>
+                    <li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A"><i class="Hui-iconfont">&#xe6d5;</i></a>
+                        <ul class="dropDown-menu menu radius box-shadow" style="right: 0px !important;">
                             <li><a href="#">修改密码</a></li>
                             <li><a href="/logout">退出</a></li>
                         </ul>
