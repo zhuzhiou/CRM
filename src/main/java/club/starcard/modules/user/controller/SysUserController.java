@@ -54,6 +54,7 @@ public class SysUserController {
         if (sysUserService.getSysUserByUsername(sysUser.getUsername()) != null) {
             return result.fluentPut("code", 2).fluentPut("message", "用户已存在");
         }
+        sysUser.setEnabled(true);
         sysUserService.saveSysUser(sysUser);
         return result.fluentPut("code", 0);
     }

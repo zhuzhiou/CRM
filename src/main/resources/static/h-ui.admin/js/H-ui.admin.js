@@ -366,4 +366,17 @@ $(function(){
 		var hrefRes=hrefStr.substring(0,hrefStr.lastIndexOf('skin/'))+'skin/'+v+'/skin.css';
 		$(window.frames.document).contents().find("#skin").attr("href",hrefRes);
 	});
+
+    $("#logout").on("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        layer.msg('你确定要退出？', {
+            time: 0 //不自动关闭
+            ,btn: ['退出', '取消']
+            ,yes: function(index){
+                layer.close(index);
+                location.href = "/logout";
+            }
+        });
+    });
 }); 

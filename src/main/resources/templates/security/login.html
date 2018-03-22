@@ -5,8 +5,6 @@
   <title>CRM后台登录页面</title>
   <p th:replace="/crm/comm/_meta :: meta"/>
   <link th:href="@{/h-ui.admin/css/H-ui.login.css}" rel="stylesheet" type="text/css" />
-  <meta name="_csrf" th:content="${_csrf.token}" />
-  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 <body>
 <input type="hidden" id="TenantId" name="TenantId" value="" />
